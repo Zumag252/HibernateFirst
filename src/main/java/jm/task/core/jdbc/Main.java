@@ -23,7 +23,7 @@ public class Main {
         return connection;
     }
 
-    public static void main(String[] args) throws SQLException {
+    public static void main(String[] args) {
         UserDaoJDBCImpl myUser = new UserDaoJDBCImpl();
         myUser.createUsersTable();
         myUser.saveUser("Artem", "Karpov", (byte) 35);
