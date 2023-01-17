@@ -37,5 +37,6 @@ public class Main {
         System.out.println(myUser.getAllUsers());
         myUser.cleanUsersTable();
         myUser.dropUsersTable();
+
     }
 }
