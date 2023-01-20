@@ -11,15 +11,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class UserServiceImpl implements UserService {
-    UserDaoJDBCImpl userDao;
-
-    public UserServiceImpl(UserDaoJDBCImpl userDao) {
-        this.userDao = userDao;
-    }
-
-    public UserServiceImpl() {
-    }
-
+    UserDaoJDBCImpl userDao = new UserDaoJDBCImpl();
     public void createUsersTable() {
         userDao.createUsersTable();
     }

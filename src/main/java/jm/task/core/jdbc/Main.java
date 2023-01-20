@@ -27,7 +27,7 @@ public class Main {
     }
 
     public static void main(String[] args) {
-        UserServiceImpl myUser = new UserServiceImpl(new UserDaoJDBCImpl(Main.getConnection()));
+        UserServiceImpl myUser = new UserServiceImpl();
         myUser.createUsersTable();
         myUser.saveUser("Artem", "Karpov", (byte) 35);
         myUser.saveUser("Ivanov", "Porfiriy", (byte) 85);
