@@ -6,31 +6,42 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserDaoJDBCImpl implements UserDao {
-
-    public UserDaoJDBCImpl() {
-
+    Connection connection;
+    public UserDaoJDBCImpl(Connection connection) {
+        this.connection = connection;
     }
-
+    public UserDaoJDBCImpl() {
+    }
     public void createUsersTable() {
-        try (Connection connection = Main.getConnection(); Statement st = connection.createStatement()) {
-            st.executeUpdate("CREATE TABLE IF NOT EXISTS Users (id TINYINT NOT NULL AUTO_INCREMENT," + "name VARCHAR(64) NOT NULL, lastname VARCHAR(64) NOT NULL, age TINYINT NOT NULL, PRIMARY KEY (id))");
+        try (Statement st = connection.createStatement()) {
+            st.executeUpdate("CREATE TABLE IF NOT EXISTS users (id TINYINT NOT NULL AUTO_INCREMENT," + "name VARCHAR(64) NOT NULL, lastname VARCHAR(64) NOT NULL, age TINYINT NOT NULL, PRIMARY KEY (id))");
             connection.commit();
         } catch (SQLException e) {
             e.getStackTrace();
+            try {
+                connection.rollback();
+            } catch (SQLException h) {
+                h.getStackTrace();
+            }
         }
     }
 
     public void dropUsersTable() {
-        try (Connection connection = Main.getConnection(); Statement st = connection.createStatement()) {
+        try (Statement st = connection.createStatement()) {
             st.executeUpdate("DROP TABLE IF EXISTS users");
             connection.commit();
         } catch (SQLException e) {
             e.getStackTrace();
+            try {
+                connection.rollback();
+            } catch (SQLException h) {
+                h.getStackTrace();
+            }
         }
     }
 
     public void saveUser(String name, String lastName, byte age) {
-        try (Connection connection = Main.getConnection(); PreparedStatement ps = connection.prepareStatement("INSERT INTO Users (name, lastname, age) VALUES (?,?,?)")) {
+        try (PreparedStatement ps = connection.prepareStatement("INSERT INTO users (name, lastname, age) VALUES (?,?,?)")) {
             ps.setString(1, name);
             ps.setString(2, lastName);
             ps.setByte(3, age);
@@ -38,21 +49,31 @@ public class UserDaoJDBCImpl implements UserDao {
             connection.commit();
         } catch (SQLException e) {
             e.getStackTrace();
+            try {
+                connection.rollback();
+            } catch (SQLException h) {
+                h.getStackTrace();
+            }
         }
     }
 
     public void removeUserById(long id) {
-        try (Connection connection = Main.getConnection(); PreparedStatement ps = connection.prepareStatement("DELETE FROM users WHERE id = ?")) {
+        try (PreparedStatement ps = connection.prepareStatement("DELETE FROM users WHERE id = ?")) {
             ps.setLong(1, id);
             ps.executeUpdate();
             connection.commit();
         } catch (SQLException e) {
             e.getStackTrace();
+            try {
+                connection.rollback();
+            } catch (SQLException h) {
+                h.getStackTrace();
+            }
         }
     }
 
     public List<User> getAllUsers() {
-        try (Connection connection = Main.getConnection(); Statement st = connection.createStatement(); ResultSet rs = st.executeQuery("SELECT * FROM users")) {
+        try (ResultSet rs = connection.createStatement().executeQuery("SELECT * FROM users")) {
             List<User> result = new ArrayList<>();
             while (rs.next()) {
                 Long id = rs.getLong("id");
@@ -70,17 +91,27 @@ public class UserDaoJDBCImpl implements UserDao {
             return result;
         } catch (SQLException e) {
             e.getStackTrace();
+            try {
+                connection.rollback();
+            } catch (SQLException h) {
+                h.getStackTrace();
+            }
             return null;
         }
     }
 
 
     public void cleanUsersTable() {
-        try (Connection connection = Main.getConnection(); Statement st = connection.createStatement()) {
+        try (Statement st = connection.createStatement()) {
             st.executeUpdate("DELETE FROM users");
             connection.commit();
         } catch (SQLException e) {
             e.getStackTrace();
+            try {
+                connection.rollback();
+            } catch (SQLException h) {
+                h.getStackTrace();
+            }
         }
     }
 }
