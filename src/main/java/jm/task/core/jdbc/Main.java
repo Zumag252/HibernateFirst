@@ -9,9 +9,9 @@ public class Main {
         UserServiceImpl myUser = new UserServiceImpl();
         myUser.createUsersTable();
         myUser.saveUser("Artem", "Karpov", (byte) 35);
-        myUser.saveUser("Ivanov", "Porfiriy", (byte) 85);
-        myUser.saveUser("Zotov", "Kirill", (byte) 41);
-        myUser.saveUser("Orlova", "Anna", (byte) 30);
+        myUser.saveUser("Porfiriy", "Ivanov", (byte) 85);
+        myUser.saveUser("Kirill", "Zotov", (byte) 41);
+        myUser.saveUser("Anna", "Orlova", (byte) 30);
         System.out.println(myUser.getAllUsers());
         myUser.cleanUsersTable();
         myUser.dropUsersTable();
